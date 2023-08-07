@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Fontawesome -->
+    <script src="https://kit.fontawesome.com/42a182743f.js" crossorigin="anonymous"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/profile.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <title>Profile</title>
+</head>
+
+<body>
+    <%-include('./partials/navbar.ejs')%>
+        <div class="profile-container" style="
+          background-image: url(https://images.pexels.com/photos/2847648/pexels-photo-2847648.jpeg?auto=compress&cs=tinysrgb&w=600);
+        ;height:100%;width:100%;background-size:cover">
+            <header style=" background-image: none; border:none">
+                <div class="icons-container" style="background: none;">
+
+                    <p>
+                        <a href="/api/v1/users/<%=user._id%>" title="update profile details">
+                            <i class="fas fa-edit" style="padding-left:30px;"></i>
+                        </a>
+                    </p>
+
+                    <p>
+                        <a href="/api/v1/users/update-password/" title="update password">
+                            <i style="padding-left:30px;color:rgb(17, 232, 113)" : class="fa-solid fa-key fas"></i>
+                        </a>
+                    </p>
+
+
+                    <form action="/api/v1/users/<%=userAuth.toString()%>?_method=delete" method="POST" onsubmit="return confirm('This will delete the entire account and its published blogs are you sure you want to continue?')" ;>
+                        <button style="background:none;border:none;padding-left:30px;padding-bottom:25px" title="delete profile">
+                                <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+
+
+
+                </div>
+                <!-- upload cover image icon -->
+
+            </header>
+
+            <!-- profile image -->
+            <div class="profile-img" style="padding-right: 60px;">
+                <img src=" <%=user.profileImage %>" />
+                <!-- upload profile image icon -->
+                <a href="/api/v1/users/upload-profile-photo-form" title="update profile image">
+                    <i class="fas fa-camera upload-btn"></i>
+                </a>
+
+            </div>
+            <!-- personal details -->
+            <div class="personal-container" style="background: none; border:none;font-family: 'Times New Roman', Times, serif;">
+                <div class="details-wrapper">
+                    <div class="details">
+                        <i class="fas fa-user"></i>
+                        <p style="padding-right: 50px; white-space: nowrap;">Name:
+                            <%=user.fullname%>
+                        </p>
+                        <i class="fas fa-envelope"></i>
+                        <p style="padding-right: 50px; white-space: nowrap;">Role:
+                            <%=user.role%>
+                        </p>
+                        <i class="fas fa-envelope"></i>
+                        <p style="padding-right: 50px; white-space: nowrap;">Email:
+                            <%=user.email%>
+                        </p>
+                    </div>
+
+                    <!-- date joined -->
+
+                </div>
+            </div>
+        </div>
+        <div class="latest-post-title">
+            <!-- Icon -->
+            <i class="fas fa-book-open"></i>
+            <h1>Latest Posts</h1>
+
+        </div>
+
+        <!-- content -->
+        <section class="container-flex">
+            <%if(user.posts.length<=0) {%>
+                <h1>You have no post</h1>
+                <%} else {%>
+
+                    <%user.posts.forEach((post)=>{%>
+                        <article class="post-content">
+
+                            <img src="<%=post.image%>" alt="" class="post-image" />
+                            <p class="post-info">
+                                <span class="post-author">
+              <i class="fas fa-user"></i>
+              <a href="#"><%=user.fullname%></a>
+            </span>
+                                <span class="post-date">
+              <i class="far fa-calendar-alt"></i>
+              <time datetime="2020-01-01">January 1, 2020</time>
+            </span>
+                            </p>
+                            <h1 class="post-title">
+                                <%=post.title%>
+                            </h1>
+                            <p class="post-body">
+                                <%=truncatePost(post.description)%>
+                            </p>
+                            <!-- category -->
+                            <div class="post-category">
+                                <span>Category:</span>
+                            </div>
+                            <a href="/api/v1/posts/<%=post._id%>" class="post-read-more">Continue Reading...</a>
+                        </article>
+                        <%})%>
+                            <%}%>
+
+
+        </section>
+        <%-include('./partials/footer.ejs')%>
+
+</body>
+
+</html>
